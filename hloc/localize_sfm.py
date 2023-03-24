@@ -87,7 +87,8 @@ def pose_from_cluster(
         points3D_ids = np.array([p.point3D_id if p.has_point3D() else -1
                                  for p in image.points2D])
 
-        matches, _ = get_matches(matches_path, qname, image.name)
+        # matches, _ = get_matches(matches_path, qname, image.name)
+        matches, _ = get_matches(matches_path, qname, "db/"+image.name)# 补充db
         matches = matches[points3D_ids[matches[:, 1]] != -1]
         num_matches += len(matches)
         for idx, m in matches:
@@ -144,7 +145,9 @@ def main(reference_sfm: Union[Path, pycolmap.Reconstruction],
     logger.info('Reading the 3D model...')
     if not isinstance(reference_sfm, pycolmap.Reconstruction):
         reference_sfm = pycolmap.Reconstruction(reference_sfm)
-    db_name_to_id = {img.name: i for i, img in reference_sfm.images.items()}
+    # db_name_to_id = {img.name: i for i, img in reference_sfm.images.items()}
+    db_name_to_id = {"db/"+img.name: i for i, img in reference_sfm.images.items()}# 补充db
+
 
     config = {"estimation": {"ransac": {"max_error": ransac_thresh}},
               **(config or {})}
