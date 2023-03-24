@@ -42,7 +42,8 @@ def main(model, output, num_matched):
             assert covis_num[ind_top[0]] == np.max(covis_num)
 
         for i in top_covis_ids:
-            pair = (image.name, images[i].name)
+            pair = ("db/"+image.name, "db/"+images[i].name)#"db/"+是后加的，为了补充colmap生成的sfm模型里图片名称没有db的前缀
+            # pair = (image.name, images[i].name)
             pairs.append(pair)
 
     logger.info(f'Found {len(pairs)} pairs.')
