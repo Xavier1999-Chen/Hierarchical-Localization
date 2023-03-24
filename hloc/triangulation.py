@@ -51,8 +51,8 @@ def create_db_from_model(reconstruction: pycolmap.Reconstruction,
 
     db.commit()
     db.close()
-    return {image.name: i for i, image in reconstruction.images.items()}
-
+    # return {image.name: i for i, image in reconstruction.images.items()}
+    return {"db/"+image.name: i for i, image in reconstruction.images.items()}#修正无db
 
 def import_features(image_ids: Dict[str, int],
                     database_path: Path,
@@ -220,6 +220,8 @@ def main(sfm_dir: Path,
     reference = pycolmap.Reconstruction(reference_model)
 
     image_ids = create_db_from_model(reference, database)
+    # # debug
+    # print(image_ids)
     import_features(image_ids, database, features)
     import_matches(image_ids, database, pairs, matches,
                    min_match_score, skip_geometric_verification)
